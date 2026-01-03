@@ -4,7 +4,7 @@ namespace Product.Application.Models;
 
 public class ProductViewModel
 {
-    public int Id { get; set; }
+    public string Id { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Ürün adı zorunludur.")]
     [StringLength(100, ErrorMessage = "Ürün adı en fazla 100 karakter olmalıdır.")]

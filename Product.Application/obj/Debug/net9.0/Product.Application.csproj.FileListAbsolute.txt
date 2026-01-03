@@ -196,3 +196,4 @@
 /Users/ahmetguvendik/Desktop/Asp.NetProject/ProductEventStoreExample/Product.Application/bin/Debug/net9.0/Shared.dll
 /Users/ahmetguvendik/Desktop/Asp.NetProject/ProductEventStoreExample/Product.Application/bin/Debug/net9.0/Shared.pdb
 /Users/ahmetguvendik/Desktop/Asp.NetProject/ProductEventStoreExample/Product.Application/obj/Debug/net9.0/Product..7E280BC3.Up2Date
+/Users/ahmetguvendik/Desktop/Asp.NetProject/ProductEventStoreExample/Product.Application/obj/Debug/net9.0/Product.Application.sourcelink.json

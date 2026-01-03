@@ -38,12 +38,15 @@ public class EventStoreService : BackgroundService
                 switch (@event)
                 {
                     case ProductCreatedEvent created:
+                        Console.WriteLine($"[EVENT] ProductCreatedEvent Id={created.Id}, Name={created.Name}");
                         await _productHandler.Handle(created, cancellationToken);
                         break;
                     case ProductUpdatedEvent updated:
+                        Console.WriteLine($"[EVENT] ProductUpdatedEvent Id={updated.Id}, Name={updated.Name}");
                         await _productHandler.Handle(updated, cancellationToken);
                         break;
                     case ProductDeletedEvent deleted:
+                        Console.WriteLine($"[EVENT] ProductDeletedEvent Id={deleted.Id}");
                         await _productHandler.Handle(deleted, cancellationToken);
                         break;
                     default:

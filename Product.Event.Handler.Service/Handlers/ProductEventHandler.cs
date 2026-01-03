@@ -18,14 +18,15 @@ public class ProductEventHandler
     {
         await using var db = await _dbFactory.CreateDbContextAsync(ct);
 
-        bool exists = await db.Products.AnyAsync(p => p.Name == evt.Name, ct);
-        if (exists)
+        bool existsById = await db.Products.AnyAsync(p => p.Id == evt.Id, ct);
+        if (existsById)
         {
-            return;
+            return; // Aynı ID ile kayıt zaten var
         }
 
         var entity = new ProductEntity
         {
+            Id = evt.Id,
             Name = evt.Name,
             Description = evt.Description,
             Stock = evt.Stock,

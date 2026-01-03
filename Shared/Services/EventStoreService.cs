@@ -33,7 +33,7 @@ public class EventStoreService : IEventStoreService
     {
         await Client.SubscribeToStreamAsync(
             streamName: streamName,
-            start: FromStream.Start,
+            start: FromStream.End,
             eventAppeared: onEventAppeared,
             subscriptionDropped: (subscription, reason, arg3) => Console.WriteLine($"SubscriptionDropped: {reason}")
         );

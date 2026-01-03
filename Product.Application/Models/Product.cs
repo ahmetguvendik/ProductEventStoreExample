@@ -4,8 +4,7 @@ namespace Product.Application.Models;
 
 public class Product
 {
-    public int Id { get; set; }
-
+    public string Id { get; set; } = Guid.NewGuid().ToString();
     [Required(ErrorMessage = "Ürün adı zorunludur.")]
     [StringLength(100, ErrorMessage = "Ürün adı en fazla 100 karakter olmalıdır.")]
     public string Name { get; set; } = string.Empty;

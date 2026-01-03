@@ -34,7 +34,7 @@ public class ProductController : Controller
         return View(vm);
     }
 
-    public async Task<IActionResult> Details(int id)
+    public async Task<IActionResult> Details(string id)
     {
         var product = await Find(id, track: false);
         if (product is null)
@@ -60,8 +60,11 @@ public class ProductController : Controller
             return View(product);
         }
 
+        var newExternalId = Guid.NewGuid().ToString();
+
         ProductCreatedEvent pce = new ProductCreatedEvent
         {
+            Id = newExternalId,
             Name = product.Name,
             Description = product.Description,
             Stock = product.Stock,
@@ -78,7 +81,7 @@ public class ProductController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    public async Task<IActionResult> Edit(int id)
+    public async Task<IActionResult> Edit(string id)
     {
         var product = await Find(id, track: false);
         if (product is null)
@@ -92,7 +95,7 @@ public class ProductController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, ProductUpdateViewModel updated)
+    public async Task<IActionResult> Edit(string id, ProductUpdateViewModel updated)
     {
         if (id != updated.Id)
         {
@@ -112,7 +115,7 @@ public class ProductController : Controller
 
         var evt = new ProductUpdatedEvent
         {
-            Id = updated.Id,
+            Id = existing.Id,
             Name = updated.Name,
             Description = updated.Description,
             Price = updated.Price,
@@ -129,7 +132,7 @@ public class ProductController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(string id)
     {
         var product = await Find(id, track: false);
         if (product is null)
@@ -143,7 +146,7 @@ public class ProductController : Controller
 
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int id)
+    public async Task<IActionResult> DeleteConfirmed(string id)
     {
         var product = await Find(id);
         if (product is null)
@@ -153,7 +156,7 @@ public class ProductController : Controller
 
         var evt = new ProductDeletedEvent
         {
-            Id = id
+            Id = product.Id
         };
 
         await _eventStore.AppendToStreamAsync("product-stream", new[]
@@ -165,7 +168,7 @@ public class ProductController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    private async Task<Models.Product?> Find(int id, bool track = true)
+    private async Task<Models.Product?> Find(string id, bool track = true)
     {
         var query = track ? _db.Products : _db.Products.AsNoTracking();
         return await query.FirstOrDefaultAsync(p => p.Id == id);

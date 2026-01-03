@@ -2,6 +2,6 @@ namespace Shared.Events;
 
 public class ProductDeletedEvent
 {
-    public int Id { get; set; }
+    public string Id { get; set; } = string.Empty; // External unique id (GUID)
 }
 

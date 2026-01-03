@@ -10,3 +10,4 @@
 /Users/ahmetguvendik/Desktop/Asp.NetProject/ProductEventStoreExample/Shared/obj/Debug/net9.0/refint/Shared.dll
 /Users/ahmetguvendik/Desktop/Asp.NetProject/ProductEventStoreExample/Shared/obj/Debug/net9.0/Shared.pdb
 /Users/ahmetguvendik/Desktop/Asp.NetProject/ProductEventStoreExample/Shared/obj/Debug/net9.0/ref/Shared.dll
+/Users/ahmetguvendik/Desktop/Asp.NetProject/ProductEventStoreExample/Shared/obj/Debug/net9.0/Shared.sourcelink.json
