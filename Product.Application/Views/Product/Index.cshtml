@@ -1,0 +1,66 @@
+@using System.Linq
+@model IEnumerable<ProductViewModel>
+@{
+    ViewData["Title"] = "Ürünler";
+}
+
+<div style="--primary:#ff7a00; --primary-soft:#ffe3c7; --bg:#fffaf5; --card:#ffffff; --text:#202124; --muted:#5f6368; --border:#ffd7b8; --shadow:0 12px 34px rgba(255,122,0,0.12); --radius:14px; background:var(--bg); padding:28px; border-radius:var(--radius); box-shadow:var(--shadow);">
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:14px;">
+        <div>
+            <h2 style="color:var(--primary); margin:0;">Ürünler</h2>
+            <p style="color:var(--muted); margin:4px 0 0;">Stoktaki tüm ürünlerin listesi</p>
+        </div>
+        <a asp-action="Create" style="background:var(--primary); color:#fff; padding:10px 16px; border-radius:10px; text-decoration:none; font-weight:600; box-shadow:0 8px 18px rgba(255,122,0,0.25);">Yeni Ürün</a>
+    </div>
+
+    @if (TempData["Success"] is string successMessage)
+    {
+        <div style="background:var(--primary-soft); border:1px solid var(--border); color:var(--text); padding:10px 14px; border-radius:10px; margin-bottom:14px;">
+            @successMessage
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div style="background:var(--card); border:1px dashed var(--border); padding:18px; border-radius:12px; color:var(--muted); text-align:center;">
+            Henüz ürün eklenmemiş. Başlamak için "Yeni Ürün" butonunu kullanabilirsiniz.
+        </div>
+    }
+    else
+    {
+        <div style="overflow:hidden; border-radius:12px; border:1px solid var(--border); background:var(--card); box-shadow:var(--shadow);">
+            <table style="width:100%; margin:0; border-collapse:separate; border-spacing:0;">
+                <thead style="background:var(--primary-soft); color:var(--text);">
+                    <tr>
+                        <th style="padding:12px 14px; text-align:left;">Ad</th>
+                        <th style="padding:12px 14px; text-align:left;">Açıklama</th>
+                        <th style="padding:12px 14px; text-align:right;">Fiyat</th>
+                        <th style="padding:12px 14px; text-align:right;">Stok</th>
+                        <th style="padding:12px 14px; text-align:left;">Oluşturma</th>
+                        <th style="padding:12px 14px; text-align:center; width:180px;">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr style="border-bottom:1px solid var(--border);">
+                        <td style="padding:12px 14px;">@item.Name</td>
+                        <td style="padding:12px 14px; color:var(--muted); max-width:320px;">@item.Description</td>
+                        <td style="padding:12px 14px; text-align:right;">@item.Price.ToString("C")</td>
+                        <td style="padding:12px 14px; text-align:right;">@item.Stock</td>
+                        <td style="padding:12px 14px;">@item.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                        <td style="padding:12px 14px; text-align:center;">
+                            <div style="display:flex; justify-content:center; gap:8px; flex-wrap:wrap;">
+                                <a asp-action="Details" asp-route-id="@item.Id" style="padding:8px 10px; border-radius:8px; background:var(--primary-soft); color:var(--text); text-decoration:none; border:1px solid var(--border);">Detay</a>
+                                <a asp-action="Edit" asp-route-id="@item.Id" style="padding:8px 10px; border-radius:8px; background:var(--primary); color:#fff; text-decoration:none; border:1px solid var(--primary);">Düzenle</a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" style="padding:8px 10px; border-radius:8px; background:#ffe0e0; color:#d32f2f; text-decoration:none; border:1px solid #f3c2c2;">Sil</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+

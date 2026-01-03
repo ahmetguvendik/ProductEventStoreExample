@@ -1,0 +1,56 @@
+@model ProductUpdateViewModel
+@{
+    ViewData["Title"] = "Ürünü Düzenle";
+}
+
+<div style="--primary:#ff7a00; --primary-soft:#ffe3c7; --bg:#fffaf5; --card:#ffffff; --text:#202124; --muted:#5f6368; --border:#ffd7b8; --shadow:0 12px 34px rgba(255,122,0,0.12); --radius:14px; background:var(--bg); padding:28px; border-radius:var(--radius); box-shadow:var(--shadow);">
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:18px;">
+        <div>
+            <h2 style="color:var(--primary); margin:0;">@Model.Name</h2>
+            <p style="color:var(--muted); margin:4px 0 0;">Ürünü güncelleyin</p>
+        </div>
+        <a asp-action="Index" style="color:var(--primary); text-decoration:none; font-weight:600;">← Listeye Dön</a>
+    </div>
+
+    <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:18px; box-shadow:var(--shadow);">
+        <div asp-validation-summary="ModelOnly" style="color:#d32f2f; margin-bottom:12px;"></div>
+
+        <form asp-action="Edit" method="post" style="display:flex; flex-direction:column; gap:14px;">
+            <input type="hidden" asp-for="Id"/>
+
+            <div>
+                <label asp-for="Name" style="display:block; color:var(--text); font-weight:600; margin-bottom:6px;"></label>
+                <input asp-for="Name" style="width:100%; padding:10px 12px; border:1px solid var(--border); border-radius:10px; background:var(--primary-soft);"/>
+                <span asp-validation-for="Name" style="color:#d32f2f; font-size:0.9rem;"></span>
+            </div>
+
+            <div>
+                <label asp-for="Description" style="display:block; color:var(--text); font-weight:600; margin-bottom:6px;"></label>
+                <textarea asp-for="Description" rows="3" style="width:100%; padding:10px 12px; border:1px solid var(--border); border-radius:10px; background:var(--primary-soft);"></textarea>
+                <span asp-validation-for="Description" style="color:#d32f2f; font-size:0.9rem;"></span>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                <div>
+                    <label asp-for="Price" style="display:block; color:var(--text); font-weight:600; margin-bottom:6px;"></label>
+                    <input asp-for="Price" style="width:100%; padding:10px 12px; border:1px solid var(--border); border-radius:10px; background:var(--primary-soft);"/>
+                    <span asp-validation-for="Price" style="color:#d32f2f; font-size:0.9rem;"></span>
+                </div>
+                <div>
+                    <label asp-for="Stock" style="display:block; color:var(--text); font-weight:600; margin-bottom:6px;"></label>
+                    <input asp-for="Stock" style="width:100%; padding:10px 12px; border:1px solid var(--border); border-radius:10px; background:var(--primary-soft);"/>
+                    <span asp-validation-for="Stock" style="color:#d32f2f; font-size:0.9rem;"></span>
+                </div>
+            </div>
+
+            <button type="submit" style="align-self:flex-start; background:var(--primary); color:#fff; padding:10px 16px; border-radius:10px; border:1px solid var(--primary); font-weight:700; box-shadow:0 8px 18px rgba(255,122,0,0.25);">
+                Güncelle
+            </button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

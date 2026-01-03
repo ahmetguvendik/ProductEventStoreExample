@@ -1,0 +1,35 @@
+@model ProductViewModel
+@{
+    ViewData["Title"] = "Ürün Detayı";
+}
+
+<div style="--primary:#ff7a00; --primary-soft:#ffe3c7; --bg:#fffaf5; --card:#ffffff; --text:#202124; --muted:#5f6368; --border:#ffd7b8; --shadow:0 12px 34px rgba(255,122,0,0.12); --radius:14px; background:var(--bg); padding:28px; border-radius:var(--radius); box-shadow:var(--shadow);">
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:18px;">
+        <div>
+            <h2 style="color:var(--primary); margin:0;">@Model.Name</h2>
+            <p style="color:var(--muted); margin:4px 0 0;">Ürün Detayı</p>
+        </div>
+        <a asp-action="Index" style="color:var(--primary); text-decoration:none; font-weight:600;">← Listeye Dön</a>
+    </div>
+
+    <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:18px; box-shadow:var(--shadow);">
+        <div style="display:grid; grid-template-columns:160px 1fr; row-gap:12px; column-gap:10px; color:var(--text);">
+            <span style="color:var(--muted);">Açıklama</span>
+            <span>@Model.Description</span>
+
+            <span style="color:var(--muted);">Fiyat</span>
+            <span>@Model.Price.ToString("C")</span>
+
+            <span style="color:var(--muted);">Stok</span>
+            <span>@Model.Stock</span>
+
+            <span style="color:var(--muted);">Oluşturma</span>
+            <span>@Model.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</span>
+        </div>
+        <div style="margin-top:18px; display:flex; gap:10px;">
+            <a asp-action="Edit" asp-route-id="@Model.Id" style="padding:10px 14px; border-radius:10px; background:var(--primary); color:#fff; text-decoration:none; border:1px solid var(--primary);">Düzenle</a>
+            <a asp-action="Delete" asp-route-id="@Model.Id" style="padding:10px 14px; border-radius:10px; background:#ffe0e0; color:#d32f2f; text-decoration:none; border:1px solid #f3c2c2;">Sil</a>
+        </div>
+    </div>
+</div>
+
