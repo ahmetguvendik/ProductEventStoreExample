@@ -39,25 +39,6 @@ public class ProductEventHandler
         await db.SaveChangesAsync(ct);
     }
 
-    public async Task Handle(ProductUpdatedEvent evt, CancellationToken ct)
-    {
-        await using var db = await _dbFactory.CreateDbContextAsync(ct);
-
-        var existing = await db.Products.FirstOrDefaultAsync(p => p.Id == evt.Id, ct);
-        if (existing is null)
-        {
-            return;
-        }
-
-        existing.Name = evt.Name;
-        existing.Description = evt.Description;
-        existing.Price = evt.Price;
-        existing.Stock = evt.Stock;
-        existing.IsActive = evt.IsActive;
-
-        await db.SaveChangesAsync(ct);
-    }
-
     public async Task Handle(ProductDeletedEvent evt, CancellationToken ct)
     {
         await using var db = await _dbFactory.CreateDbContextAsync(ct);
@@ -70,6 +51,57 @@ public class ProductEventHandler
 
         db.Products.Remove(existing);
         await db.SaveChangesAsync(ct);
+    }
+
+    public async Task Handle(StockDecreasedEvent evt, CancellationToken ct)
+    {
+        await using var db = await _dbFactory.CreateDbContextAsync(ct);
+
+        var existing = await db.Products.FirstOrDefaultAsync(p => p.Id == evt.Id, ct);
+        if (existing is null)
+        {
+            return;
+        }
+
+        // Stoku güncelle
+        existing.Stock = evt.NewStock;
+        await db.SaveChangesAsync(ct);
+
+        Console.WriteLine($"[STOCK DECREASED] Product Id={evt.Id}, OldStock={evt.OldStock}, NewStock={evt.NewStock}, Decreased={evt.DecreasedAmount}");
+    }
+
+    public async Task Handle(StockIncreasedEvent evt, CancellationToken ct)
+    {
+        await using var db = await _dbFactory.CreateDbContextAsync(ct);
+
+        var existing = await db.Products.FirstOrDefaultAsync(p => p.Id == evt.Id, ct);
+        if (existing is null)
+        {
+            return;
+        }
+
+        // Stoku güncelle
+        existing.Stock = evt.NewStock;
+        await db.SaveChangesAsync(ct);
+
+        Console.WriteLine($"[STOCK INCREASED] Product Id={evt.Id}, OldStock={evt.OldStock}, NewStock={evt.NewStock}, Increased={evt.IncreasedAmount}");
+    }
+
+    public async Task Handle(PriceChangedEvent evt, CancellationToken ct)
+    {
+        await using var db = await _dbFactory.CreateDbContextAsync(ct);
+
+        var existing = await db.Products.FirstOrDefaultAsync(p => p.Id == evt.Id, ct);
+        if (existing is null)
+        {
+            return;
+        }
+
+        // Fiyatı güncelle
+        existing.Price = evt.NewPrice;
+        await db.SaveChangesAsync(ct);
+
+        Console.WriteLine($"[PRICE CHANGED] Product Id={evt.Id}, OldPrice={evt.OldPrice}, NewPrice={evt.NewPrice}, Difference={evt.PriceDifference}");
     }
 }
 

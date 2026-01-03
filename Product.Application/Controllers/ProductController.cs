@@ -113,21 +113,53 @@ public class ProductController : Controller
             return NotFound("Ürün bulunamadı.");
         }
 
-        var evt = new ProductUpdatedEvent
-        {
-            Id = existing.Id,
-            Name = updated.Name,
-            Description = updated.Description,
-            Price = updated.Price,
-            Stock = updated.Stock,
-            IsActive = true
-        };
+        var eventsToPublish = new List<object>();
 
-        await _eventStore.AppendToStreamAsync("product-stream", new[]
+        // Stok değişikliklerini kontrol et
+        if (updated.Stock != existing.Stock)
         {
-            _eventStore.GenerateEventData(evt)
-        });
+            if (updated.Stock < existing.Stock)
+            {
+                // Stok azaldı
+                var stockDecreasedEvent = new StockDecreasedEvent
+                {
+                    Id = existing.Id,
+                    OldStock = existing.Stock,
+                    NewStock = updated.Stock,
+                    DecreasedAmount = existing.Stock - updated.Stock
+                };
+                eventsToPublish.Add(stockDecreasedEvent);
+            }
+            else
+            {
+                // Stok arttı
+                var stockIncreasedEvent = new StockIncreasedEvent
+                {
+                    Id = existing.Id,
+                    OldStock = existing.Stock,
+                    NewStock = updated.Stock,
+                    IncreasedAmount = updated.Stock - existing.Stock
+                };
+                eventsToPublish.Add(stockIncreasedEvent);
+            }
+        }
 
+        // Fiyat değişikliğini kontrol et
+        if (updated.Price != existing.Price)
+        {
+            var priceChangedEvent = new PriceChangedEvent
+            {
+                Id = existing.Id,
+                OldPrice = existing.Price,
+                NewPrice = updated.Price,
+                PriceDifference = updated.Price - existing.Price
+            };
+            eventsToPublish.Add(priceChangedEvent);
+        }
+
+        // Tüm event'leri yayınla
+        var eventDataList = eventsToPublish.Select(e => _eventStore.GenerateEventData(e)).ToArray();
+        await _eventStore.AppendToStreamAsync("product-stream", eventDataList);
         TempData["Success"] = "Ürün güncelleme isteği alındı ve kuyruğa yazıldı.";
         return RedirectToAction(nameof(Index));
     }
